@@ -37,16 +37,41 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.util.Log;
 
+import org.omnirom.device.KeyDisabler;
+
 public class DeviceSettings extends PreferenceFragment implements
         Preference.OnPreferenceChangeListener {
 
     public static final String KEY_VIBSTRENGTH = "vib_strength";
+    public static final String KEY_NAV = "hw_toggler";
+
+    public static final String TAG = "DeviceSettings";
 
     private VibratorStrengthPreference mVibratorStrength;
+    private SwitchPreference mHWToggler;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.main, rootKey);
+
+        mHWToggler = (SwitchPreference) findPreference(KEY_NAV);
+        if (mHWToggler != null && KeyDisabler.isSupported()) {
+            mHWToggler.setEnabled(true);
+            mHWToggler.setChecked(KeyDisabler.isActive())
+        } else {
+            mHWToggler.setEnabled(false);
+        }
+
+        mHWToggler.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                boolean value = (Boolean) newValue;
+                Log.d(TAG, "onPreferenceChange: "+value);
+                KeyDisabler.setActive(value);
+                return true;
+            }
+        });
 
         mVibratorStrength = (VibratorStrengthPreference) findPreference(KEY_VIBSTRENGTH);
         if (mVibratorStrength != null) {
