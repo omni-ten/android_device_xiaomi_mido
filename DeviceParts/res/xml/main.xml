@@ -79,4 +79,21 @@
             android:title="@string/dirac_preset_title" />
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:key="display"
+        android:title="@string/display_title">
+
+        <Preference
+            android:key="device_kcal"
+            android:persistent="false"
+            android:summary="@string/device_kcal_suammary"
+            android:title="@string/device_kcal_title">
+            <intent
+                android:action="android.intent.action.MAIN"
+                android:targetClass="org.omnirom.device.kcal.KCalSettingsActivity"
+                android:targetPackage="org.omnirom.device.kcal" />
+        </Preference>
+        
+    </PreferenceCategory>
+
 </PreferenceScreen>
